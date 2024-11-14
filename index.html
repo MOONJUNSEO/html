@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>위치 정보 지도</title>
+    <style>
+        /* 지도 크기 설정 */
+        #map {
+            height: 600px;
+            width: 100%;
+        }
+    </style>
+    <!-- 네이버 지도 API 스크립트 (지오코더 포함) -->
+    <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=C0tZhYvWgxSRYwDxmHiVoaMcp8M4ENxoqLlNKoMA&submodules=geocoder"></script>
+</head>
+<body>
+    <h1>수신된 위치 정보 지도</h1>
+    <div id="map"></div>
+
+    <script>
+        function initMap() {
+            // 초기 지도 설정 (중심 위치와 줌)
+            const map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(36.5, 127.5), // 기본 위치 (한국 중앙)
+                zoom: 7
+            });
+
+            // 서버에서 받은 위치 정보를 가져와 지도에 마커 추가
+            const locations = {{ locations | tojson }};
+            locations.forEach((location) => {
+                new naver.maps.Marker({
+                    position: new naver.maps.LatLng(location.latitude, location.longitude),
+                    map: map
+                });
+            });
+        }
+
+        // 페이지 로드 시 지도 초기화
+        window.onload = initMap;
+    </script>
+</body>
+</html>
